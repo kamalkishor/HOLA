@@ -1,0 +1,183 @@
+package com.dlmlabs.lastride.background;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.IBinder;
+import android.widget.Toast;
+import android.util.Log;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.dlmlabs.lastride.util.Util;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+
+public class MyService extends Service {
+	task temp;
+	
+	private static int count = 0;
+   // temp = new task();
+   @Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+
+		super.onCreate();
+
+
+	}
+
+   @Override
+   public int onStartCommand(Intent intent, int flags, int startId) {
+      // Let it continue running until it is stopped.
+      Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+      try {
+
+          //Toast.makeText(this, "object created", Toast.LENGTH_LONG).show();
+          new task().execute();
+          //temp.execute();
+          //Toast.makeText(this, "query executed", Toast.LENGTH_LONG).show();
+
+      }
+      catch(Exception e){
+          //Toast.makeText(this, "query execution error", Toast.LENGTH_LONG).show();
+          StringWriter stack = new StringWriter();
+          e.printStackTrace(new PrintWriter(stack));
+          Log.e("piyush",stack.toString());
+      }
+      return START_STICKY;
+   }
+   
+   @Override
+   public void onDestroy() {
+      super.onDestroy();
+   }
+	@Override
+	public IBinder onBind(Intent intent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public void showBookingDetails(boolean value) {
+		if(value && count<1) {
+			count++;
+			Util.showToastLong(this, "Booking Confirmed");
+			stopSelf();
+		}
+	}
+	
+	class task extends AsyncTask<String, String, Void> {
+	    //private ProgressDialog progressDialog = new ProgressDialog(new MainActivity());
+	    InputStream is = null;
+	    String result = "";
+
+	    protected void onPreExecute() {
+	        //progressDialog.setMessage("Fetching data...");
+	        //progressDialog.show();
+	        //progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	            //@Override
+	            //public void onCancel(DialogInterface arg0) {
+	            //    task.this.cancel(true);
+	            //}
+	       // });
+	        return;
+	    }
+
+	    @Override
+	    protected Void doInBackground(String... params) {
+	        Log.v("piyush","my message");
+	        String url_select = "http://aaola.byethost13.com/checkstatus.php";
+
+	        HttpClient httpClient = new DefaultHttpClient();
+	        HttpPost httpPost = new HttpPost(url_select);
+
+	        ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+	        try {
+	            httpPost.setEntity(new UrlEncodedFormEntity(param));
+
+	            HttpResponse httpResponse = httpClient.execute(httpPost);
+	            HttpEntity httpEntity = httpResponse.getEntity();
+
+	            //read content
+	            is = httpEntity.getContent();
+
+	        } catch (Exception e) {
+
+	            Log.e("log_tag", "Error in http connection " + e.toString());
+	            //Toast.makeText(MainActivity.this, "Please Try Again", Toast.LENGTH_LONG).show();
+	        }
+	        try {
+	            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+	            StringBuilder sb = new StringBuilder();
+	            String line = "";
+	            while ((line = br.readLine()) != null) {
+	                sb.append(line + "\n");
+	            }
+	            is.close();
+	            result = sb.toString();
+
+	        } catch (Exception e) {
+	            // TODO: handle exception
+	            Log.e("log_tag", "Error converting result " + e.toString());
+	        }
+
+	        return null;
+
+	    }
+
+	    protected void onPostExecute(Void v) {
+
+	        // ambil data dari Json database
+	        try {
+	            Log.v("meeth", result);
+	            if(result.equals("1\n")) {
+	            	//
+	            	showBookingDetails(true);
+	            	
+	            } else {
+	            	//showBookingDetails(false);
+	            }
+	            /*JSONArray Jarray = new JSONArray(result);
+	            for (int i = 0; i < Jarray.length(); i++) {
+	                JSONObject Jasonobject = null;
+	                //text_1 = (TextView)findViewById(R.id.txt1);
+	                Jasonobject = Jarray.getJSONObject(i);
+
+	                //get an output on the screen
+	                //String id = Jasonobject.getString("id");
+	                String name = Jasonobject.getString("name");
+	                String db_detail = "";
+
+	                if (et.getText().toString().equalsIgnoreCase(name)) {
+	                    db_detail = Jasonobject.getString("detail");
+	                    //text.setText(db_detail);
+	                    Log.d("async", db_detail);
+	                    break;
+	                }
+	                //text_1.append(id+"\t\t"+name+"\t\t"+password+"\t\t"+"\n");
+
+	            }*/
+
+	            //this.progressDialog.dismiss();
+
+	        } catch (Exception e) {
+	            // TODO: handle exception
+	            Log.e("log_tag", "Error parsing data " + e.toString());
+	        }
+	    }
+	}
+}
+
+

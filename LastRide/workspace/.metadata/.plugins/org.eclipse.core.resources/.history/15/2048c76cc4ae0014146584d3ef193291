@@ -1,0 +1,27 @@
+package com.dlmlabs.lastride.util;
+
+public class Constants {
+	
+	public static final String APP_NAME = "LastRide";
+	public static final boolean DEBUG = true;
+	
+	public static final int DELAY_FRAGMENT_SWITCH = 2000;
+	
+	// Flags Dialog
+	public static final boolean FLAG_CANCELLED_ON_TOUCH_OUTSIDE = false;
+	
+	// ID Fragments
+	public static final int ID_SPLASH_SCREEN_FRAGMENT = 1;
+	public static final int ID_REGISTER_FRAGMENT = 2;
+	public static final int ID_HOME_FRAGMENT = 3;
+	public static final int ID_VERIFY_FRAGMENT = 4;
+	public static final int ID_ERROR_FRAGMENT = 404;
+		
+	// Tags Fragment 
+	public static final String TAG_SPLASH_SCREEN_FRAGMENT = "tag_splash_screen_fragment";
+	public static final String TAG_REGISTER_FRAGMENT = "tag_register_fragment";
+	public static final String TAG_HOME_FRAGMENT = "tag_home_fragment";
+	public static final String TAG_VERIFY_FRAGMENT = "tag_verify_fragment";
+	public static final String TAG_ERROR_FRAGMENT = "tag_error_fragment";
+	
+}

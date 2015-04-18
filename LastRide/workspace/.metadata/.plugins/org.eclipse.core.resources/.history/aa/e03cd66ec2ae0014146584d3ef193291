@@ -1,0 +1,21 @@
+package com.dlmlabs.lastride.ui;
+
+public class ErrorFragment {
+
+	public static ErrorFragment newInstance() {
+		ErrorFragment frag = new ErrorFragment();
+		return frag;
+	}
+	
+	public static String getMyTag() {
+		return TAG_ERROR_FRAGMENT;
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_error, container, false);
+		return view;
+	}
+	
+}

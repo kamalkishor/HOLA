@@ -1,0 +1,99 @@
+package com.dlmlabs.lastride.ui;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.WindowManager;
+
+import com.dlmlabs.lastride.R;
+import com.dlmlabs.lastride.util.Constants;
+import com.dlmlabs.lastride.util.Util;
+import com.google.android.gms.maps.GoogleMap;
+
+
+
+public class HomeActivity extends Activity {
+
+	private GoogleMap mGoogleMap;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        
+    	super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        
+        if(Util.isNetworkAvailable(this)) {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                	replaceFragment(RegisterFragment.getMyId());
+                }
+            }, Constants.DELAY_FRAGMENT_SWITCH);
+        } else {
+        	replaceFragment(RegisterFragment.getMyId());
+        	Util.showToastLong(this, getString(R.string.message_network_unavailable));
+        }
+        
+        /*if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new PlaceholderFragment())
+                    .commit();
+        }*/
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    //Fragment Helpers
+    private String getFragmentTag(int id) {
+    	switch(id) {
+	    	case Constants.ID_SPLASH_SCREEN_FRAGMENT : {
+	    		return SplashScreenFragment.getMyTag();
+			}
+			case Constants.ID_HOME_FRAGMENT : {
+				return Constants.TAG_HOME_FRAGMENT;
+			}
+			default : {
+				return ErrorFragment.getMyTag();
+			}
+		}
+    }
+    
+    private Fragment getNewFragment(int id) {
+    	switch(id) {
+	    	case Constants.ID_SPLASH_SCREEN_FRAGMENT : {
+	    		return SplashScreenFragment.newInstance();
+			}
+			case Constants.ID_HOME_FRAGMENT : {
+				return HomeFragment.newInstance();
+			}
+			default : {
+				return ErrorFragment.newInstance();
+			}
+		}
+    }
+    
+    
+}

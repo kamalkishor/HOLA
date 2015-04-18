@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	tools:context="com.dlmlabs.lastride.DriverActivity"
+    android:orientation="vertical" >
+    
+    <FrameLayout
+	    android:id="@+id/map_frame_layout"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="10"
+	    android:orientation="vertical" >
+    
+    <fragment
+         android:id="@+id/container_driver"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         class="com.google.android.gms.maps.MapFragment" />
+
+    	<ImageView
+	        android:id="@+id/map_marker"
+	        android:layout_width="55dp"
+	        android:layout_height="55dp"
+	        android:layout_gravity="center_vertical|center_horizontal"
+	        android:src="@drawable/ic_marker" />
+    </FrameLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:layout_marginTop="0dp"
+		android:layout_marginBottom="0dp"
+        android:orientation="horizontal" >
+        <Button
+	        android:id="@+id/buttonConfirm"
+	        android:layout_width="0dip"
+	        android:layout_height="match_parent"
+	        android:layout_weight="90"
+	        android:text="Confirm"
+	        style="@style/MyFlatButton" />
+
+        <View
+            android:id="@+id/viewLine"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+	    <Button
+	        android:id="@+id/buttonCancel"
+	        android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="90"
+	        android:text="Cancel"
+	        style="@style/MyFlatButton" />
+    </LinearLayout>
+
+    
+    
+</LinearLayout>
+
